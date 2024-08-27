@@ -169,3 +169,4 @@ cython_debug/
 *.txt
 **/cache.json
 *.png
+**/media/
