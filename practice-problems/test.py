@@ -14,8 +14,8 @@ class ProblemExplanation(VoiceoverScene):
         # Problem Statement
 
         text = MarkupText(f"Find the tension in each chord \nif the weight of the suspended object is 4 N.")
-        with self.voiceover(text="In this problem, we want to find the tension in each chord \nif the weight of the suspended object is 4 N.") as tracker:
-            self.play(Write(text))
+        with self.voiceover(text="In this problem, we want to find the tension in each chord if the weight of the suspended object is 4 N.") as tracker:
+            self.play(Write(text), run_time=tracker.duration)
 
         title = MarkupText(f"Find the <span fgcolor='{YELLOW}'>tension in each chord</span> \nif the weight of the suspended object is <span fgcolor='{RED}'>4 N</span>.")
         title.to_corner(UP + LEFT)
@@ -48,7 +48,7 @@ class ProblemExplanation(VoiceoverScene):
         fbd = VGroup(ceiling, chord1, chord2, chord3, a1, a2, a1_text, a2_text, weight)
 
         with self.voiceover(text="And the diagram provided looks something like this.") as tracker:
-            self.play(Create(fbd))
+            self.play(Create(fbd), run_time=tracker.duration)
 
         self.wait(1)
         self.play(FadeOut(fbd))
@@ -70,7 +70,7 @@ class ProblemExplanation(VoiceoverScene):
             to make things easier to visualize. I'll label the forces on the chords and keep in mind the angles they make with the ceiling.") as tracker:
             self.play(FadeOut(title))
             self.play(FadeOut(text))
-            self.play(Create(fbd))
+            self.play(Create(fbd, run_time=tracker.duration))
         
         # Write Parent Eqn And Move It To Corner
         eqn_text = MathTex(r"\Sigma F = ", "ma")
@@ -158,4 +158,4 @@ class ProblemExplanation(VoiceoverScene):
         with self.voiceover(text="Lastly, and perhaps unceremoniously, we can solve for T1 and T2 using our two equations we've made. The solution to this problem is T1 equals 3.59 Newtons and T2 equals 2.93 Newtons.") as tracker:
             self.play(Transform(framebox2, framebox3))
             self.play(Write(soln_text))
-            self.wait(1)
+        self.wait(2)
