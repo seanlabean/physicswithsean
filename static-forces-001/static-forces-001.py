@@ -71,6 +71,58 @@ class ProblemSample(Scene):
         self.add(fbd)
         self.wait()
 
+        # Write Parent Eqn And Move It To Corner
+        eqn_text = MathTex(r"\Sigma F = ", "ma")
+        eqn_text2 = MathTex(r"\Sigma F = ", "0")
+        comp_text = MathTex(r"\Sigma F_{x} = 0", r", ", r"~ \Sigma F_{y} = 0")
+
+        self.add(eqn_text)
+
+        self.play(ReplacementTransform(eqn_text, eqn_text2))
+
+        self.play(ReplacementTransform(eqn_text2, comp_text))
+        comp_text.generate_target()
+        comp_text.target.to_corner(UP + RIGHT)
+        
+        self.play(MoveToTarget(comp_text))
+        framebox1 = SurroundingRectangle(comp_text[0], buff = .1)
+        framebox2 = SurroundingRectangle(comp_text[2], buff = .1)
+        self.play(Create(framebox1))
+        self.wait(1)
+
+        # Identify And Write Out X-Components
+        xcomp_text = MathTex(r"-T_{1}cos(30^\circ)", r"+ T_{2}cos(45^\circ)", r" = 0").shift(RIGHT * 2)
+        line_reference = Line().shift(fbd_origin).set_color(YELLOW)
+        ang1 = Angle(line_reference, arrow1, radius=0.5, other_angle=False, quadrant=(-1,1))
+        ang2 = Angle(line_reference, arrow2, radius=0.5, other_angle=False)
+        ang1_text = MathTex(r"30^\circ").next_to(ang1.get_end(), LEFT, buff=0.5)
+        ang2_text = MathTex(r"45^\circ").next_to(ang2.get_end(), RIGHT, buff=0.5)
+        refs1 = VGroup(line_reference, ang1, ang1_text)
+
+        self.play(Create(refs1))
+
+        t1_xcomp = Arrow(fbd_origin, (xfbd, 0, 0), buff=0).set_color(PINK)
+
+        self.play(Create(t1_xcomp))
+        self.play(Write(xcomp_text[0]))
+        self.wait(1)
+
+        t2_xcomp = Arrow(fbd_origin, (xfbd+3.5, 0, 0), buff=0).set_color(PINK)
+        refs2 = VGroup(ang2, ang2_text, t2_xcomp)
+        self.remove(t1_xcomp)
+
+        self.play(Create(refs2))
+        self.play(Write(xcomp_text[1]))
+        self.play(Write(xcomp_text[2]))
+
+        xcomp_text.generate_target()
+        xcomp_text.target.to_corner(UP + RIGHT).shift(DOWN)
+        self.play(MoveToTarget(xcomp_text))
+        self.remove(t2_xcomp)
+
+        self.wait(1)
+        self.play(Transform(framebox1, framebox2))
+
 class ProblemExplanation(VoiceoverScene):
     def construct(self):
         self.set_speech_service(RecorderService(silence_threshold=-40.0))
