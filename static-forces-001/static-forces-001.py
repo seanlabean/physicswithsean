@@ -101,13 +101,13 @@ class ProblemSample(Scene):
 
         self.play(Create(refs1))
 
-        t1_xcomp = Arrow(fbd_origin, (xfbd, 0, 0), buff=0).set_color(PINK)
+        t1_xcomp = Arrow(fbd_origin, (xfbd, 1, 0), buff=0).set_color(PINK)
 
         self.play(Create(t1_xcomp))
         self.play(Write(xcomp_text[0]))
         self.wait(1)
 
-        t2_xcomp = Arrow(fbd_origin, (xfbd+3.5, 0, 0), buff=0).set_color(PINK)
+        t2_xcomp = Arrow(fbd_origin, (xfbd+3.5, 1, 0), buff=0).set_color(PINK)
         refs2 = VGroup(ang2, ang2_text, t2_xcomp)
         self.remove(t1_xcomp)
 
@@ -122,6 +122,30 @@ class ProblemSample(Scene):
 
         self.wait(1)
         self.play(Transform(framebox1, framebox2))
+
+        # Identify And Write Out Y-Components
+        ycomp_text = MathTex(r"-T_{1}sin(30^\circ)", r"+ T_{2}sin(45^\circ)", r" - 7 N", r"= 0").shift(RIGHT * 2)
+        t1_ycomp = Arrow(np.array([xfbd, 1, 0]), arrow1.get_end(), buff=0).set_color(PINK)
+        t2_ycomp = Arrow(np.array([arrow2.get_end()[0], 1, 0]), arrow2.get_end(), buff=0).set_color(PINK)
+        w_ycomp = Arrow(fbd_origin, arrow3.get_end(), buff=0).set_color(PINK)
+
+        self.play(Create(t1_ycomp))
+        self.play(Write(ycomp_text[0]))
+        self.remove(t1_ycomp)
+
+        self.play(Create(t2_ycomp))
+        self.play(Write(ycomp_text[1]))
+        self.remove(t2_ycomp)
+
+        self.play(Create(w_ycomp))
+        self.play(Write(ycomp_text[2:]))
+
+        self.remove(w_ycomp)
+        ycomp_text.generate_target()
+        ycomp_text.target.to_corner(UP + RIGHT).shift(DOWN * 2)
+        self.play(MoveToTarget(ycomp_text))
+        self.remove(framebox1, framebox2)
+        self.wait(1)
 
 class ProblemExplanation(VoiceoverScene):
     def construct(self):
