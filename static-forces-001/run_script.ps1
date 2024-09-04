@@ -1,0 +1,1 @@
+python -m manim -pql .\static-forces-001 ProblemSample
