@@ -101,13 +101,13 @@ class ProblemSample(Scene):
 
         self.play(Create(refs1))
 
-        t1_xcomp = Arrow(fbd_origin, (xfbd, 1, 0), buff=0).set_color(PINK)
+        t1_xcomp = Arrow(fbd_origin, (xfbd-0.5, 1, 0), buff=0).set_color(PINK)
 
         self.play(Create(t1_xcomp))
         self.play(Write(xcomp_text[0]))
         self.wait(1)
 
-        t2_xcomp = Arrow(fbd_origin, (xfbd+3.5, 1, 0), buff=0).set_color(PINK)
+        t2_xcomp = Arrow(fbd_origin, (xfbd+3, 1, 0), buff=0).set_color(PINK)
         refs2 = VGroup(ang2, ang2_text, t2_xcomp)
         self.remove(t1_xcomp)
 
@@ -125,7 +125,7 @@ class ProblemSample(Scene):
 
         # Identify And Write Out Y-Components
         ycomp_text = MathTex(r"-T_{1}sin(30^\circ)", r"+ T_{2}sin(45^\circ)", r" - 7 N", r"= 0").shift(RIGHT * 2)
-        t1_ycomp = Arrow(np.array([xfbd, 1, 0]), arrow1.get_end(), buff=0).set_color(PINK)
+        t1_ycomp = Arrow(np.array([xfbd-0.5, 1, 0]), arrow1.get_end(), buff=0).set_color(PINK)
         t2_ycomp = Arrow(np.array([arrow2.get_end()[0], 1, 0]), arrow2.get_end(), buff=0).set_color(PINK)
         w_ycomp = Arrow(fbd_origin, arrow3.get_end(), buff=0).set_color(PINK)
 
@@ -146,6 +146,17 @@ class ProblemSample(Scene):
         self.play(MoveToTarget(ycomp_text))
         self.remove(framebox1, framebox2)
         self.wait(1)
+
+        # Finish The Problem With Some Algebra
+        eqn_text = VGroup(xcomp_text, ycomp_text)
+        framebox3 = SurroundingRectangle(eqn_text, buff = .1).set_color(ORANGE)
+        soln_text = MathTex(r"T_{1} = 19.1 N; T_{2} = 23.5 N").shift(RIGHT)
+
+
+        self.play(Transform(framebox2, framebox3))
+        self.play(Write(soln_text))
+
+        self.wait(2)
 
 class ProblemExplanation(VoiceoverScene):
     def construct(self):
