@@ -7,10 +7,12 @@ from manim_voiceover.services.recorder import RecorderService
 class ProblemExplanation(VoiceoverScene):
     def construct(self):
         self.set_speech_service(RecorderService(silence_threshold=-40.0))
-        text = MarkupText(f"PhysicsWithSean")
-        with self.voiceover(text="Welcome, this is physicswithsean where I teach you how to solve physics practice problems.") as tracker:
-            self.play(Write(text))
-        self.play(FadeOut(text))    
+        # Cover image, self introduction
+        cover_img = ImageMobject("moon-lady-pws.jpg").scale(0.5)
+        with self.voiceover(text="Welcome Physics with Sean, let's do another practice problem.") as tracker:
+            self.play(FadeIn(cover_img))
+            self.wait(duration=tracker.duration)
+        self.play(FadeOut(cover_img))  
         # Problem Statement
 
         text = MarkupText(f"Find the tension in each chord \nif the weight of the suspended object is 4 N.")
