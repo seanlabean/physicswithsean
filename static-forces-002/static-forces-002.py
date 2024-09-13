@@ -26,3 +26,28 @@ class BallOnStringOnWall(Scene):
             Transform(ptext, ptitle),
         )
         self.wait()
+
+        # Draw Problem Diagram
+        x = -4
+        y = 1
+        wall = Line(start=(x, y, 0), end=(x, y-3, 0))
+        string = Line(start=wall.start, end=(x-0.75, y-2,0))
+        ball = Circle(radius=0.75, color=RED).shift(LEFT*4.75, DOWN)
+        #rbrace = Brace(string)
+        #rbrace_text = rbrace.get_tex("32cm")
+        #sbrace = Brace(string, direction=string.copy().rotate(3*PI/2).get_unit_vector())
+        #sbrace_text = sbrace.get_tex("30cm")
+        stext = Text("32cm", font_size=20).next_to(string.start, LEFT*1.5 + DOWN*2.5)
+        rtext = Text("30cm").next_to(ball)
+        angle = Angle(string, wall, radius=0.5, other_angle=False)
+        angle_text =  MathTex(r"\theta").scale(0.6).move_to(
+            Angle(
+                wall, string, radius=0.5 + 3 * SMALL_BUFF, other_angle=True
+            ).point_from_proportion(0.5)
+        )
+
+        diagram = VGroup(wall,string,ball,angle,angle_text)
+        self.play(Create(diagram))
+        labels = VGroup(stext, rtext)
+        self.play(Create(labels))
+        self.wait()
