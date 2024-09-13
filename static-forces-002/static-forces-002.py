@@ -38,8 +38,8 @@ class BallOnStringOnWall(Scene):
         #rbrace_text = rbrace.get_tex("32cm")
         #sbrace = Brace(string, direction=string.copy().rotate(3*PI/2).get_unit_vector())
         #sbrace_text = sbrace.get_tex("30cm")
-        stext = Text("32cm", font_size=20).next_to(string.start, LEFT*1.5 + DOWN*2.5)
-        rtext = Text("30cm", font_size=20).next_to(radius, DOWN)
+        stext = Text("30cm", font_size=20).next_to(string.start, LEFT*1.5 + DOWN*2.5)
+        rtext = Text("16cm", font_size=20).next_to(radius, DOWN)
         angle = Angle(string, wall, radius=0.5, other_angle=False)
         angle_text =  MathTex(r"\theta").scale(0.6).move_to(
             Angle(
@@ -54,8 +54,24 @@ class BallOnStringOnWall(Scene):
         self.wait()
 
         # Get Angle Before Anything Else
+        theta_eqn_text0 = MathTex(r"\text{sin}(\theta) = ", r"\frac{\text{opposite}}{\text{hypotenuse}}")
+        theta_eqn_text1 = MathTex(r"\theta = ", r"\text{sin}^{-1}\Big(\frac{\text{opposite}}{\text{hypotenuse}}\Big)")
+        theta_eqn_text2 = MathTex(r"\theta = ", r"\text{sin}^{-1}\Big(\frac{\text{16 \text{cm}}}{30 \text{cm}}\Big)")
+        theta_eqn_text3 = MathTex(r"\theta = ", r"20.4^\circ")
+        self.play(Write(theta_eqn_text0))
+        self.play(ReplacementTransform(theta_eqn_text0, theta_eqn_text1)); self.remove(theta_eqn_text0)
+        self.play(ReplacementTransform(theta_eqn_text1, theta_eqn_text2)); self.remove(theta_eqn_text1)
+        self.play(ReplacementTransform(theta_eqn_text2, theta_eqn_text3)); self.remove(theta_eqn_text2)
 
+        self.wait(2)
+
+        theta_eqn_text3.generate_target()
+        theta_eqn_text3.target.to_corner(UP+RIGHT)
+        self.play(MoveToTarget(theta_eqn_text3))
         # Draw Free Body Diagram
+        self.play(Unwrite(ptitle))
+        task_reminder = MarkupText("Find the <span fgcolor={RED}>tension of the wire<span>.", font_size=32).to_corner(UP + LEFT)
+        self.play(Create(task_reminder))
 
         # Solve For T
 
