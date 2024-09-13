@@ -33,12 +33,13 @@ class BallOnStringOnWall(Scene):
         wall = Line(start=(x, y, 0), end=(x, y-3, 0))
         string = Line(start=wall.start, end=(x-0.75, y-2,0))
         ball = Circle(radius=0.75, color=RED).shift(LEFT*4.75, DOWN)
+        radius = Line(start=string.end, end=string.end+np.array([ball.radius, 0, 0]), color=RED)
         #rbrace = Brace(string)
         #rbrace_text = rbrace.get_tex("32cm")
         #sbrace = Brace(string, direction=string.copy().rotate(3*PI/2).get_unit_vector())
         #sbrace_text = sbrace.get_tex("30cm")
         stext = Text("32cm", font_size=20).next_to(string.start, LEFT*1.5 + DOWN*2.5)
-        rtext = Text("30cm").next_to(ball)
+        rtext = Text("30cm", font_size=20).next_to(radius, DOWN)
         angle = Angle(string, wall, radius=0.5, other_angle=False)
         angle_text =  MathTex(r"\theta").scale(0.6).move_to(
             Angle(
@@ -48,6 +49,14 @@ class BallOnStringOnWall(Scene):
 
         diagram = VGroup(wall,string,ball,angle,angle_text)
         self.play(Create(diagram))
-        labels = VGroup(stext, rtext)
+        labels = VGroup(stext, rtext, radius)
         self.play(Create(labels))
         self.wait()
+
+        # Get Angle Before Anything Else
+
+        # Draw Free Body Diagram
+
+        # Solve For T
+
+        # How Hard Does Ball Push On Wall?
