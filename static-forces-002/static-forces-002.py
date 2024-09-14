@@ -69,8 +69,9 @@ class BallOnStringOnWall(Scene):
         theta_eqn_text3.target.to_corner(UP+RIGHT)
         self.play(MoveToTarget(theta_eqn_text3))
         # Draw Free Body Diagram
+        self.remove(ptext)
         self.play(Unwrite(ptitle))
-        task_reminder = MarkupText("Find the <span fgcolor={RED}>tension of the wire<span>.", font_size=32).to_corner(UP + LEFT)
+        task_reminder = MarkupText(f"Find the <span fgcolor='{RED}'>tension of the wire</span>.", font_size=32).to_corner(UP + LEFT)
         self.play(Create(task_reminder))
 
         # Solve For T
