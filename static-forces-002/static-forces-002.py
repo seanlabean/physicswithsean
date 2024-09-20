@@ -5,7 +5,7 @@ from manim_voiceover.services.recorder import RecorderService
 # Example call to process video
 # python -m manim -pqh .\static-forces-000.py ProblemExplanation
 
-class BallOnStringOnWall(Scene):
+class BallOnStringOnWall(VoiceoverScene):
     def construct(self):
         self.set_speech_service(RecorderService(silence_threshold=-40.0))
         # Cover image, self introduction
@@ -60,13 +60,11 @@ class BallOnStringOnWall(Scene):
         theta_eqn_text1 = MathTex(r"\theta = ", r"\text{sin}^{-1}\Big(\frac{\text{opposite}}{\text{hypotenuse}}\Big)")
         theta_eqn_text2 = MathTex(r"\theta = ", r"\text{sin}^{-1}\Big(\frac{\text{16 \text{cm}}}{30 \text{cm}}\Big)")
         theta_eqn_text3 = MathTex(r"\theta = ", r"20.4^\circ")
-        with self.voiceover(text="Before we get going with anything else, I want to find the angle the wire makes with the wall ")
-        self.play(Write(theta_eqn_text0))
-        self.play(ReplacementTransform(theta_eqn_text0, theta_eqn_text1)); self.remove(theta_eqn_text0)
-        self.play(ReplacementTransform(theta_eqn_text1, theta_eqn_text2)); self.remove(theta_eqn_text1)
-        self.play(ReplacementTransform(theta_eqn_text2, theta_eqn_text3)); self.remove(theta_eqn_text2)
-
-        self.wait(2)
+        with self.voiceover(text="Before we get going with anything else, I want to find the angle the wire makes with the wall. We can do this easily by using our trigonometry knowledge: sine of an angle is equal to the ratio of the opposite and hypotenuse sides. And we can plug in 16cm for the opposite side (ball radius) and 30cm for the hypotenuse (wire length) ") as tracker:
+            self.play(Write(theta_eqn_text0), run_time=tracker.duration/4)
+            self.play(ReplacementTransform(theta_eqn_text0, theta_eqn_text1), run_time=tracker.duration/4); self.remove(theta_eqn_text0)
+            self.play(ReplacementTransform(theta_eqn_text1, theta_eqn_text2), run_time=tracker.duration/4); self.remove(theta_eqn_text1)
+            self.play(ReplacementTransform(theta_eqn_text2, theta_eqn_text3), run_time=tracker.duration/4); self.remove(theta_eqn_text2)
 
         theta_eqn_text3.generate_target()
         theta_eqn_text3.target.to_corner(UP+RIGHT)
@@ -86,17 +84,22 @@ class BallOnStringOnWall(Scene):
         fbdG = Arrow(ball.get_center(), ball.get_center() - np.array([0,1.0,0]), buff=0)
 
         fbd = VGroup(fbdT, fbdN, fbdG)
-        self.play(Create(fbd))
-        self.play(Uncreate(diagram))
+        with self.voiceover(text="We can simplify our picture into a free-body-diagram, showing the tension of the wire, the weight of the ball, and the Normal force acting on the ball as it presses on the wall.") as tracker:
+            self.play(Uncreate(diagram), Create(fbd), run_time=tracker.duration)
+            #self.play(Create(fbd), run_time=tracker.duration/2)
+            
         # Solve For T
         forcesy0 = MathTex(r"\Sigma F_{y} = 0")
         forcesy1 = MathTex(r"T\text{cos}(\theta) - mg = 0")
 
-        self.play(Write(forcesy0))
+        with self.voiceover(text="To find the tension of the wire, we can consider the y-components of forces acting on the system.") as tracker:
+            self.play(Write(forcesy0), run_time=tracker.duration)
 
         fdbTy = Arrow(fbdT.get_start(), np.array([fbdT.get_start()[0],wall.start[1]+1.05,0]), buff=0).set_color('PINK')
         fbdTy_ang = Angle(fdbTy, fbdT, other_angle=True)
-        self.play(Unwrite(forcesy0), Write(forcesy1), Create(fdbTy), Create(fbdTy_ang), fbdG.animate.set_color('PINK'))
+
+        with self.voiceover(text="For y-components, we have the y component of the tension which we can isolate with a little help from cosine, and the force of gravity acting downwards on the ball.") as tracker:
+            self.play(Unwrite(forcesy0), Write(forcesy1), Create(fdbTy), Create(fbdTy_ang), fbdG.animate.set_color('PINK'), run_time=tracker.duration)
         
         forcesy2 = MathTex(r"T\text{cos}(20.4^\circ) - (45kg)*(9.8\frac{m}{s^2}) = 0")
 
@@ -104,8 +107,9 @@ class BallOnStringOnWall(Scene):
 
         forcesy3 = MathTex(r"T = 470 N")
 
-        self.play(Transform(forcesy2, forcesy3))
-        self.remove(forcesy2)
+        with self.voiceover(text="Plugging in some numbers, we find that the tension T is 470 Newtons.") as tracker:
+            self.play(Transform(forcesy2, forcesy3))
+            self.remove(forcesy2)
         
         self.play(forcesy3.animate.to_corner(UP + RIGHT).shift(DOWN))
 
@@ -114,15 +118,21 @@ class BallOnStringOnWall(Scene):
         self.play(Unwrite(task_reminder))
 
         task_reminder = MarkupText(f"How hard does the ball push on the wall?", font_size=32).to_corner(UP + LEFT)
-        self.play(Write(task_reminder))
+
+        with self.voiceover(text="There's a second part of this problem that asks, 'how hard does the ball push on the wall'?") as tracker:
+            self.play(Write(task_reminder))
 
         fbdTx = Arrow(fbdT.get_start(), np.array([fbdT.get_end()[0],0.5,0]), buff=0).set_color('PINK')
         forcesx0 = MathTex(r"T\text{sin}(\theta) - N = 0")
         forcesx1 = MathTex(r"N = T\text{sin}(\theta)")
         forcesx2 = MathTex(r"N = 163 N")
 
-        self.play(Create(fbdTx), fbdN.animate.set_color('PINK'), Write(forcesx0))
-        self.play(Transform(forcesx0, forcesx1))
-        self.remove(forcesx0, forcesx1)
-        self.play(Transform(forcesx1, forcesx2))
+        with self.voiceover(text="There's a trick to this one: we have to remember that the Normal force represents the reaction to the ball pushing on the wall, so the value of the normal force is our answer!") as tracker:
+            self.play(Create(fbdTx), fbdN.animate.set_color('PINK'), Write(forcesx0))
+        with self.voiceover(text="And we can solve that quickly by plugging in for theta and T which we have from before") as tracker:
+            self.play(Transform(forcesx0, forcesx1))
+            self.remove(forcesx0, forcesx1)
+            self.play(Transform(forcesx1, forcesx2))
 
+        with self.voiceover(text="Thanks for watching! Let me know fi you have any questions or thoughts.") as tracker:
+            self.wait(duration=tracker.duration)
