@@ -80,11 +80,11 @@ class BallOnStringOnWall(VoiceoverScene):
         diagram.shift(UP*1.5)
 
         fbdT = Arrow(ball.get_center(), wall.start + np.array([0.0,1.0,0.0]), buff=0)
-        fbdT_label = MathTex('T').next_to(fbdT.get_end(), RIGHT, buff=0.7)
+        fbdT_label = MathTex('T').next_to(fbdT.get_end(), RIGHT, buff=0.2)
         fbdN = Arrow(ball.get_center(), ball.get_center() - np.array([1.0,0,0]), buff=0)
-        fbdN_label = MathTex('N').next_to(fbdN.get_end(), UP, buff=0.7)
+        fbdN_label = MathTex('N').next_to(fbdN.get_end(), UP, buff=0.2)
         fbdG = Arrow(ball.get_center(), ball.get_center() - np.array([0,1.0,0]), buff=0)
-        fbdG_label = MathTex('mg').next_to(fbdG.get_end(), RIGHT, buff=0.7)
+        fbdG_label = MathTex('mg').next_to(fbdG.get_end(), RIGHT, buff=0.2)
 
         fbd = VGroup(fbdT, fbdN, fbdG, fbdT_label, fbdN_label, fbdG_label)
         with self.voiceover(text="We can simplify our picture into a free-body-diagram, showing the tension of the wire, the weight of the ball, and the Normal force acting on the ball as it presses on the wall.") as tracker:
@@ -107,13 +107,12 @@ class BallOnStringOnWall(VoiceoverScene):
         
         forcesy2 = MathTex(r"T\text{cos}(20.4^\circ) - (45kg)*(9.8\frac{m}{s^2}) = 0")
 
-        
-
         forcesy3 = MathTex(r"T = 470 N")
 
         with self.voiceover(text="Plugging in some numbers, we find that the tension T is 470 Newtons.") as tracker:
             self.play(Unwrite(forcesy1))
-            self.play(Write(forcesy2), Transform(forcesy2, forcesy3), run_time=tracker.duration)
+            self.play(Write(forcesy2), run_time=tracker.duration/2)
+            self.play(Transform(forcesy2, forcesy3), run_time=tracker.duration/2)
             self.remove(forcesy2)
         
         self.play(forcesy3.animate.to_corner(UP + RIGHT).shift(DOWN))
