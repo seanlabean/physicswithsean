@@ -80,10 +80,13 @@ class BallOnStringOnWall(VoiceoverScene):
         diagram.shift(UP*1.5)
 
         fbdT = Arrow(ball.get_center(), wall.start + np.array([0.0,1.0,0.0]), buff=0)
+        fbdT_label = MathTex('T').next_to(fbdT.get_end(), RIGHT, buff=0.7)
         fbdN = Arrow(ball.get_center(), ball.get_center() - np.array([1.0,0,0]), buff=0)
+        fbdN_label = MathTex('N').next_to(fbdN.get_end(), UP, buff=0.7)
         fbdG = Arrow(ball.get_center(), ball.get_center() - np.array([0,1.0,0]), buff=0)
+        fbdG_label = MathTex('mg').next_to(fbdG.get_end(), RIGHT, buff=0.7)
 
-        fbd = VGroup(fbdT, fbdN, fbdG)
+        fbd = VGroup(fbdT, fbdN, fbdG, fbdT_label, fbdN_label, fbdG_label)
         with self.voiceover(text="We can simplify our picture into a free-body-diagram, showing the tension of the wire, the weight of the ball, and the Normal force acting on the ball as it presses on the wall.") as tracker:
             self.play(Uncreate(diagram), Create(fbd), run_time=tracker.duration)
             #self.play(Create(fbd), run_time=tracker.duration/2)
@@ -99,16 +102,18 @@ class BallOnStringOnWall(VoiceoverScene):
         fbdTy_ang = Angle(fdbTy, fbdT, other_angle=True)
 
         with self.voiceover(text="For y-components, we have the y component of the tension which we can isolate with a little help from cosine, and the force of gravity acting downwards on the ball.") as tracker:
-            self.play(Unwrite(forcesy0), Write(forcesy1), Create(fdbTy), Create(fbdTy_ang), fbdG.animate.set_color('PINK'), run_time=tracker.duration)
+            self.play(Unwrite(forcesy0))
+            self.play(Write(forcesy1), Create(fdbTy), Create(fbdTy_ang), fbdG.animate.set_color('PINK'), run_time=tracker.duration)
         
         forcesy2 = MathTex(r"T\text{cos}(20.4^\circ) - (45kg)*(9.8\frac{m}{s^2}) = 0")
 
-        self.play(Unwrite(forcesy1), Write(forcesy2))
+        
 
         forcesy3 = MathTex(r"T = 470 N")
 
         with self.voiceover(text="Plugging in some numbers, we find that the tension T is 470 Newtons.") as tracker:
-            self.play(Transform(forcesy2, forcesy3))
+            self.play(Unwrite(forcesy1))
+            self.play(Write(forcesy2), Transform(forcesy2, forcesy3), run_time=tracker.duration)
             self.remove(forcesy2)
         
         self.play(forcesy3.animate.to_corner(UP + RIGHT).shift(DOWN))
@@ -130,9 +135,9 @@ class BallOnStringOnWall(VoiceoverScene):
         with self.voiceover(text="There's a trick to this one: we have to remember that the Normal force represents the reaction to the ball pushing on the wall, so the value of the normal force is our answer!") as tracker:
             self.play(Create(fbdTx), fbdN.animate.set_color('PINK'), Write(forcesx0))
         with self.voiceover(text="And we can solve that quickly by plugging in for theta and T which we have from before") as tracker:
-            self.play(Transform(forcesx0, forcesx1))
+            self.play(Transform(forcesx0, forcesx1), run_time=tracker.duration/3)
             self.remove(forcesx0, forcesx1)
-            self.play(Transform(forcesx1, forcesx2))
+            self.play(Transform(forcesx1, forcesx2), run_time=tracker.duration/3)
 
         with self.voiceover(text="Thanks for watching! Let me know fi you have any questions or thoughts.") as tracker:
             self.wait(duration=tracker.duration)
